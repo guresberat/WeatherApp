@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var tv_max: TextView
     lateinit var tv_min: TextView
     lateinit var tv_speed: TextView
+    lateinit var iv_main:ImageView
 
     private var mProgressDialog: Dialog? = null
 
@@ -64,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         tv_max = findViewById(R.id.tv_max)
         tv_min = findViewById(R.id.tv_min)
         tv_speed = findViewById(R.id.tv_speed)
+        iv_main = findViewById(R.id.iv_main)
 
         if (!isLocationEnabled()) {
             Toast.makeText(
@@ -251,7 +254,23 @@ class MainActivity : AppCompatActivity() {
             tv_speed.text = weatherList.wind.speed.toString()
             tv_name.text = weatherList.name
             tv_country.text = weatherList.sys.country
-
+            when (weatherList.weather[i].icon) {
+                "01d" -> iv_main.setImageResource(R.drawable.sunny)
+                "02d" -> iv_main.setImageResource(R.drawable.cloud)
+                "03d" -> iv_main.setImageResource(R.drawable.cloud)
+                "04d" -> iv_main.setImageResource(R.drawable.cloud)
+                "04n" -> iv_main.setImageResource(R.drawable.cloud)
+                "10d" -> iv_main.setImageResource(R.drawable.rain)
+                "11d" -> iv_main.setImageResource(R.drawable.storm)
+                "13d" -> iv_main.setImageResource(R.drawable.snowflake)
+                "01n" -> iv_main.setImageResource(R.drawable.cloud)
+                "02n" -> iv_main.setImageResource(R.drawable.cloud)
+                "03n" -> iv_main.setImageResource(R.drawable.cloud)
+                "10n" -> iv_main.setImageResource(R.drawable.cloud)
+                "11n" -> iv_main.setImageResource(R.drawable.rain)
+                "13n" -> iv_main.setImageResource(R.drawable.snowflake)
+                "50n" -> iv_main.setImageResource(R.drawable.cloud)
+            }
         }
     }
 
