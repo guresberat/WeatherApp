@@ -27,14 +27,24 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    lateinit var tv_main:TextView
-    lateinit var tv_main_description:TextView
-    lateinit var tv_temp:TextView
+    lateinit var tv_main: TextView
+    lateinit var tv_main_description: TextView
+    lateinit var tv_temp: TextView
+    lateinit var tv_sunrise_time: TextView
+    lateinit var tv_sunset_time: TextView
+    lateinit var tv_name: TextView
+    lateinit var tv_country: TextView
+    lateinit var tv_humidity: TextView
+    lateinit var tv_max: TextView
+    lateinit var tv_min: TextView
+    lateinit var tv_speed: TextView
 
     private var mProgressDialog: Dialog? = null
 
@@ -46,6 +56,14 @@ class MainActivity : AppCompatActivity() {
         tv_main = findViewById(R.id.tv_main)
         tv_main_description = findViewById(R.id.tv_main_description)
         tv_temp = findViewById(R.id.tv_temp)
+        tv_sunrise_time = findViewById(R.id.tv_sunrise_time)
+        tv_sunset_time = findViewById(R.id.tv_sunset_time)
+        tv_name = findViewById(R.id.tv_name)
+        tv_country = findViewById(R.id.tv_country)
+        tv_humidity = findViewById(R.id.tv_humidity)
+        tv_max = findViewById(R.id.tv_max)
+        tv_min = findViewById(R.id.tv_min)
+        tv_speed = findViewById(R.id.tv_speed)
 
         if (!isLocationEnabled()) {
             Toast.makeText(
@@ -219,21 +237,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupUI(weatherList: WeatherResponse){
-        for(i in weatherList.weather.indices){
+    private fun setupUI(weatherList: WeatherResponse) {
+        for (i in weatherList.weather.indices) {
             tv_main.text = weatherList.weather[i].main
             tv_main_description.text = weatherList.weather[i].description
-            tv_temp.text = weatherList.main.temp.toString() + getUnit(application.resources.configuration.locales.toString())
+            tv_temp.text =
+                weatherList.main.temp.toString() + getUnit(application.resources.configuration.locales.toString())
+            tv_sunrise_time.text = unixTime(weatherList.sys.sunrise)
+            tv_sunset_time.text = unixTime(weatherList.sys.sunset)
+            tv_humidity.text = weatherList.main.humidity.toString() + " per cent"
+            tv_min.text = weatherList.main.temp_min.toString() + " min"
+            tv_max.text = weatherList.main.temp_max.toString() + " max"
+            tv_speed.text = weatherList.wind.speed.toString()
+            tv_name.text = weatherList.name
+            tv_country.text = weatherList.sys.country
+
         }
     }
 
 
-    private fun getUnit(value: String):String?{
-        var value ="°C"
+    private fun getUnit(value: String): String? {
+        var value = "°C"
         if ("US" == value || "LR" == value || "MM" == value) {
             value = "°F"
         }
         return value
     }
 
+    private fun unixTime(timex: Long): String? {
+        val date = Date(timex * 1000L)
+        val sdf = SimpleDateFormat("HH:mm:ss", Locale.UK)
+        sdf.timeZone = TimeZone.getDefault()
+        return sdf.format(date)
+    }
 }
