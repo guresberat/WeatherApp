@@ -1,6 +1,6 @@
 # WeatherApp
 
-- An app that show info about your location's wheather.
+- An app that shows info about your location's weather.
 
 Made this app to exercise and learn about GSON, JSON datas, Retrofit, Dexter, AsyncTask and Shared Preferences.
 
